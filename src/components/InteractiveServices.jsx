@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight, CheckCircle2, Sparkles } from 'lucide-react';
+import MagneticButton from './MagneticButton';
 
 export default function InteractiveServices({ onSelectService, onExploreAllServices }) {
   const [hoveredIdx, setHoveredIdx] = useState(0);
@@ -121,6 +122,7 @@ export default function InteractiveServices({ onSelectService, onExploreAllServi
                   whileHover={{ x: 8 }}
                   onMouseEnter={() => setHoveredIdx(idx)}
                   onClick={() => onSelectService && onSelectService(item.title)}
+                  data-cursor="explore"
                   className={`group py-5 sm:py-6 px-4 sm:px-6 rounded-2xl transition-all duration-300 cursor-pointer border ${
                     isHovered
                       ? 'bg-[#0B0D13] border-primary/60 shadow-glow-sm'
@@ -222,13 +224,14 @@ export default function InteractiveServices({ onSelectService, onExploreAllServi
                     </div>
                   </div>
 
-                  <button
+                  <MagneticButton
+                    strength={0.2}
                     onClick={() => onSelectService && onSelectService(services[hoveredIdx].title)}
-                    className="w-full py-3 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white text-black hover:bg-zinc-200 transition-colors flex items-center justify-center gap-2"
+                    className="w-full py-3.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-white text-black hover:bg-zinc-200 transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-lg"
                   >
                     <span>COMMISSION THIS SERVICE</span>
                     <ArrowUpRight className="w-4 h-4" />
-                  </button>
+                  </MagneticButton>
                 </motion.div>
               )}
             </AnimatePresence>

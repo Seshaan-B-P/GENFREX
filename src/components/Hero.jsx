@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, ArrowDown, Sparkles } from 'lucide-react';
+import MagneticButton from './MagneticButton';
 
 export default function Hero({ onStartProject, onExploreServices, onNavigate }) {
   const tickerItems = [
@@ -115,10 +116,9 @@ export default function Hero({ onStartProject, onExploreServices, onNavigate }) 
 
         {/* Action Buttons: Checkout Self-Made & Discovery Call */}
         <div className="flex flex-wrap items-center gap-3">
-          {/* Opening Act Checkout Self-Made Pill */}
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+          {/* Opening Act Checkout Self-Made Pill with Magnetic Physics */}
+          <MagneticButton
+            strength={0.25}
             onClick={() => onNavigate ? onNavigate('self-made') : onStartProject()}
             className="group flex items-center gap-3.5 py-2 px-4 rounded-full bg-[#0E1015] border border-primary/40 hover:border-accent-cyan transition-all shadow-glow-sm cursor-pointer"
           >
@@ -133,17 +133,16 @@ export default function Hero({ onStartProject, onExploreServices, onNavigate }) 
             <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white shrink-0 group-hover:bg-primary-hover transition-colors">
               <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
             </div>
-          </motion.button>
+          </MagneticButton>
 
-          {/* Schedule Discovery Call Pill */}
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+          {/* Schedule Discovery Call Pill with Magnetic Physics */}
+          <MagneticButton
+            strength={0.2}
             onClick={onStartProject}
             className="group flex items-center gap-3 py-2 px-4 rounded-full bg-white/[0.04] border border-white/10 hover:border-white/25 transition-all text-xs font-mono uppercase tracking-wider text-zinc-300 hover:text-white cursor-pointer"
           >
             <span>DISCOVERY CALL</span>
-          </motion.button>
+          </MagneticButton>
         </div>
       </div>
 

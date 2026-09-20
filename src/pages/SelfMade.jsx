@@ -20,6 +20,8 @@ import {
   Layers,
   ArrowLeft
 } from 'lucide-react';
+import SpotlightCard from '../components/SpotlightCard';
+import MagneticButton from '../components/MagneticButton';
 
 export default function SelfMade({ onNavigate, onStartProject }) {
   const [modalOpen, setModalOpen] = useState(false);
@@ -202,22 +204,24 @@ export default function SelfMade({ onNavigate, onStartProject }) {
             We build that entire engine inside your business, run it from day one, then <span className="text-white font-semibold">hand you the keys</span>.
           </motion.p>
 
-          {/* Action CTAs */}
+          {/* Action CTAs with Magnetic Physics */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
             className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4"
           >
-            <button
+            <MagneticButton
+              strength={0.25}
               onClick={() => setModalOpen(true)}
               className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-primary hover:bg-primary-hover text-white text-sm font-mono uppercase tracking-wider font-semibold transition-all shadow-glow-md hover:shadow-glow-lg group cursor-pointer"
             >
               <span>Apply to Join Self-Made</span>
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </button>
+            </MagneticButton>
 
-            <button
+            <MagneticButton
+              strength={0.2}
               onClick={() => {
                 if (onStartProject) onStartProject();
                 else if (onNavigate) onNavigate('contact');
@@ -225,7 +229,7 @@ export default function SelfMade({ onNavigate, onStartProject }) {
               className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-[#0E1015] hover:bg-white/[0.06] border border-white/10 hover:border-white/20 text-zinc-300 hover:text-white text-sm font-mono uppercase tracking-wider transition-all cursor-pointer"
             >
               <span>Schedule Founder Briefing</span>
-            </button>
+            </MagneticButton>
           </motion.div>
         </div>
 
@@ -248,30 +252,33 @@ export default function SelfMade({ onNavigate, onStartProject }) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className={`p-8 rounded-2xl border transition-all flex flex-col justify-between ${
-                  card.highlight
-                    ? 'bg-[#0A0E18] border-primary/50 shadow-glow-sm'
-                    : 'bg-[#0A0B0E] border-white/[0.07] hover:border-white/20'
-                }`}
               >
-                <div>
-                  <div className="flex items-center justify-between mb-6">
-                    <span className={`px-3 py-1 rounded-full text-[11px] font-mono font-bold tracking-widest border ${card.badgeColor}`}>
-                      {card.label}
-                    </span>
-                    {card.highlight && (
-                      <Sparkles className="w-4 h-4 text-accent-cyan" />
-                    )}
+                <SpotlightCard
+                  className={`p-8 h-full flex flex-col justify-between ${
+                    card.highlight ? 'border-primary/50 shadow-glow-sm' : ''
+                  }`}
+                  spotlightColor={card.highlight ? 'rgba(0, 102, 255, 0.25)' : 'rgba(0, 102, 255, 0.12)'}
+                  borderColor={card.highlight ? 'rgba(0, 209, 255, 0.6)' : 'rgba(255, 255, 255, 0.2)'}
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-6">
+                      <span className={`px-3 py-1 rounded-full text-[11px] font-mono font-bold tracking-widest border ${card.badgeColor}`}>
+                        {card.label}
+                      </span>
+                      {card.highlight && (
+                        <Sparkles className="w-4 h-4 text-accent-cyan" />
+                      )}
+                    </div>
+
+                    <h3 className="font-display font-bold text-xl text-white mb-3">
+                      {card.title}
+                    </h3>
+
+                    <p className="text-zinc-400 text-sm leading-relaxed">
+                      {card.desc}
+                    </p>
                   </div>
-
-                  <h3 className="font-display font-bold text-xl text-white mb-3">
-                    {card.title}
-                  </h3>
-
-                  <p className="text-zinc-400 text-sm leading-relaxed">
-                    {card.desc}
-                  </p>
-                </div>
+                </SpotlightCard>
               </motion.div>
             ))}
           </div>
@@ -310,9 +317,9 @@ export default function SelfMade({ onNavigate, onStartProject }) {
                   <div className="w-2 h-2 rounded-full bg-primary group-hover:bg-accent-cyan transition-colors" />
                 </div>
 
-                {/* Phase Content Box */}
-                <div className="p-6 sm:p-8 rounded-2xl bg-[#0B0D12] border border-white/[0.08] hover:border-primary/40 transition-all">
-                  <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+                {/* Phase Content Box with Spotlight Glow */}
+                <SpotlightCard className="p-6 sm:p-8 space-y-4">
+                  <div className="flex flex-wrap items-center justify-between gap-4 mb-2">
                     <span className="text-xs font-mono font-bold tracking-widest text-zinc-500 uppercase">
                       {phase.phase}
                     </span>
@@ -321,11 +328,11 @@ export default function SelfMade({ onNavigate, onStartProject }) {
                     </span>
                   </div>
 
-                  <h3 className="font-display font-bold text-xl sm:text-2xl text-white mb-3">
+                  <h3 className="font-display font-bold text-xl sm:text-2xl text-white">
                     {phase.title}
                   </h3>
 
-                  <p className="text-zinc-400 text-sm sm:text-base leading-relaxed mb-6">
+                  <p className="text-zinc-400 text-sm sm:text-base leading-relaxed">
                     {phase.desc}
                   </p>
 
@@ -343,7 +350,7 @@ export default function SelfMade({ onNavigate, onStartProject }) {
                       {phase.driver}
                     </span>
                   </div>
-                </div>
+                </SpotlightCard>
               </motion.div>
             ))}
           </div>
@@ -365,13 +372,14 @@ export default function SelfMade({ onNavigate, onStartProject }) {
             <p className="text-zinc-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-8">
               A high-calibre commercial media engine that runs autonomously inside your business—built in a fraction of the time and cost of doing it alone.
             </p>
-            <button
+            <MagneticButton
+              strength={0.25}
               onClick={() => setModalOpen(true)}
               className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-primary hover:bg-primary-hover text-white text-xs font-mono uppercase tracking-widest font-bold transition-all shadow-glow-md cursor-pointer"
             >
               <span>Submit Founder Application</span>
               <ArrowRight className="w-4 h-4" />
-            </button>
+            </MagneticButton>
           </motion.div>
         </div>
 
@@ -414,15 +422,20 @@ export default function SelfMade({ onNavigate, onStartProject }) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.35, delay: idx * 0.04 }}
-                  whileHover={{ y: -4, borderColor: 'rgba(0, 209, 255, 0.6)' }}
-                  className="p-5 rounded-2xl bg-[#090B0E] border border-white/[0.07] transition-colors flex items-center gap-3.5 group cursor-default shadow-sm hover:shadow-glow-sm"
+                  whileHover={{ y: -4 }}
                 >
-                  <div className="w-8 h-8 rounded-xl bg-zinc-900 border border-white/10 flex items-center justify-center text-zinc-400 group-hover:text-accent-cyan group-hover:bg-primary/20 transition-colors shrink-0">
-                    <Icon className="w-4 h-4" />
-                  </div>
-                  <span className="text-xs font-mono text-zinc-300 group-hover:text-white font-semibold transition-colors">
-                    {item.name}
-                  </span>
+                  <SpotlightCard
+                    className="p-5 h-full flex items-center gap-3.5 group cursor-default shadow-sm"
+                    spotlightColor="rgba(0, 209, 255, 0.15)"
+                    borderColor="rgba(0, 209, 255, 0.4)"
+                  >
+                    <div className="w-8 h-8 rounded-xl bg-zinc-900 border border-white/10 flex items-center justify-center text-zinc-400 group-hover:text-accent-cyan group-hover:bg-primary/20 transition-colors shrink-0">
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    <span className="text-xs font-mono text-zinc-300 group-hover:text-white font-semibold transition-colors">
+                      {item.name}
+                    </span>
+                  </SpotlightCard>
                 </motion.div>
               );
             })}

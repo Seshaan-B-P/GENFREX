@@ -1,19 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 
 export default function AboutManifesto({ onExploreAbout, onExploreSelfMade }) {
-  const [rotationAngle, setRotationAngle] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-
-  // Auto-rotate 3D cylinder smoothly when not hovered
-  useEffect(() => {
-    if (isPaused) return;
-    const interval = setInterval(() => {
-      setRotationAngle((prev) => (prev + 0.25) % 360);
-    }, 30);
-    return () => clearInterval(interval);
-  }, [isPaused]);
+  const ringRef = useRef(null);
+  const currentAngleRef = useRef(0);
+  const targetAngleRef = useRef(0);
+  const isPausedRef = useRef(false);
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
 
   const cards = [
     {
@@ -94,8 +89,56 @@ export default function AboutManifesto({ onExploreAbout, onExploreSelfMade }) {
     return () => window.removeEventListener('resize', updateDimensions);
   }, []);
 
+  // High-performance 60-120fps requestAnimationFrame loop (Zero React re-render lag)
+  useEffect(() => {
+    let animId;
+    let lastTime = performance.now();
+
+    const loop = (currentTime) => {
+      const delta = Math.min((currentTime - lastTime) / 1000, 0.1);
+      lastTime = currentTime;
+
+      if (!isPausedRef.current && !isDraggingRef.current) {
+        // Continuous, silky-smooth clockwise rotation: 12 degrees per second
+        targetAngleRef.current -= 12 * delta;
+      }
+
+      // Butter-smooth spring damping / inertia
+      const diff = targetAngleRef.current - currentAngleRef.current;
+      currentAngleRef.current += diff * 0.12;
+
+      if (ringRef.current) {
+        ringRef.current.style.transform = `rotateY(${currentAngleRef.current}deg)`;
+      }
+
+      animId = requestAnimationFrame(loop);
+    };
+
+    animId = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(animId);
+  }, []);
+
+  const handlePointerDown = (e) => {
+    isDraggingRef.current = true;
+    isPausedRef.current = true;
+    startXRef.current = e.clientX ?? 0;
+  };
+
+  const handlePointerMove = (e) => {
+    if (!isDraggingRef.current) return;
+    const currentX = e.clientX ?? 0;
+    const diff = currentX - startXRef.current;
+    targetAngleRef.current += diff * 0.45;
+    startXRef.current = currentX;
+  };
+
+  const handlePointerUp = () => {
+    isDraggingRef.current = false;
+    isPausedRef.current = false;
+  };
+
   const rotateBy = (degrees) => {
-    setRotationAngle((prev) => prev + degrees);
+    targetAngleRef.current += degrees;
   };
 
   return (
@@ -108,15 +151,22 @@ export default function AboutManifesto({ onExploreAbout, onExploreSelfMade }) {
         {/* Left Column: Contained 3D Cylinder Carousel */}
         <div className="lg:col-span-5 flex flex-col items-center justify-center">
           <div
-            onMouseEnter={() => setIsPaused(true)}
-            onMouseLeave={() => setIsPaused(false)}
-            className="w-full max-w-[360px] h-[350px] sm:h-[380px] flex items-center justify-center carousel-3d-scene select-none relative cursor-grab active:cursor-grabbing"
+            onMouseEnter={() => {
+              if (!isDraggingRef.current) isPausedRef.current = true;
+            }}
+            onMouseLeave={() => {
+              isDraggingRef.current = false;
+              isPausedRef.current = false;
+            }}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            data-cursor="drag"
+            className="w-full max-w-[360px] h-[350px] sm:h-[380px] flex items-center justify-center carousel-3d-scene select-none relative cursor-grab active:cursor-grabbing touch-none"
           >
             <div
+              ref={ringRef}
               className="carousel-3d-ring"
-              style={{
-                transform: `rotateY(${rotationAngle}deg)`,
-              }}
             >
               {cards.map((card, idx) => {
                 const angle = (idx * 360) / totalCards;
@@ -175,9 +225,9 @@ export default function AboutManifesto({ onExploreAbout, onExploreSelfMade }) {
           {/* Clean Carousel Controls (No messy labels) */}
           <div className="flex items-center gap-3 mt-4">
             <button
-              onClick={() => rotateBy(-60)}
+              onClick={() => rotateBy(60)}
               aria-label="Previous card"
-              className="p-2 rounded-full bg-white/[0.04] hover:bg-primary hover:text-white text-zinc-400 border border-white/10 transition-colors"
+              className="p-2 rounded-full bg-white/[0.04] hover:bg-primary hover:text-white text-zinc-400 border border-white/10 transition-colors cursor-pointer"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
@@ -185,9 +235,9 @@ export default function AboutManifesto({ onExploreAbout, onExploreSelfMade }) {
               DISCIPLINES · ROTATE
             </span>
             <button
-              onClick={() => rotateBy(60)}
+              onClick={() => rotateBy(-60)}
               aria-label="Next card"
-              className="p-2 rounded-full bg-white/[0.04] hover:bg-primary hover:text-white text-zinc-400 border border-white/10 transition-colors"
+              className="p-2 rounded-full bg-white/[0.04] hover:bg-primary hover:text-white text-zinc-400 border border-white/10 transition-colors cursor-pointer"
             >
               <ChevronRight className="w-4 h-4" />
             </button>

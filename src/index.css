@@ -72,6 +72,7 @@
     height: 100%;
     transform-style: preserve-3d;
     transform-origin: 50% 50%;
+    will-change: transform;
   }
 
   .carousel-3d-card {
@@ -81,6 +82,7 @@
     transform-style: preserve-3d;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
+    will-change: transform;
   }
 
   /* Text stroke for massive headline */
@@ -159,5 +161,13 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Hide default cursor only on fine-pointer devices when custom cursor is active */
+@media (hover: hover) and (pointer: fine) {
+  html.custom-cursor-active,
+  html.custom-cursor-active * {
+    cursor: none !important;
   }
 }

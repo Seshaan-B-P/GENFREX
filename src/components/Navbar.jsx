@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import MagneticButton from './MagneticButton';
 
 export default function Navbar({ activePage, setActivePage }) {
   const [scrolled, setScrolled] = useState(false);
@@ -98,7 +99,8 @@ export default function Navbar({ activePage, setActivePage }) {
               const isActive = activePage === link.id;
               if (link.isSpecial) {
                 return (
-                  <button
+                  <MagneticButton
+                    strength={0.2}
                     key={link.id}
                     onClick={() => handleNavClick(link.id)}
                     className={`px-3 py-1 rounded-full text-[11px] font-bold tracking-wider transition-all border ${
@@ -108,7 +110,7 @@ export default function Navbar({ activePage, setActivePage }) {
                     }`}
                   >
                     ★ {link.name}
-                  </button>
+                  </MagneticButton>
                 );
               }
               return (
@@ -137,15 +139,16 @@ export default function Navbar({ activePage, setActivePage }) {
               <span>{timeString}</span>
             </div>
 
-            {/* Menu Trigger Button */}
-            <button
+            {/* Menu Trigger Button with Magnetic Physics */}
+            <MagneticButton
+              strength={0.25}
               onClick={() => setFullMenuOpen(!fullMenuOpen)}
               className="px-4 py-1.5 rounded-full text-xs font-mono tracking-wider font-semibold uppercase bg-white/[0.06] hover:bg-primary hover:text-white border border-white/10 text-white transition-all flex items-center gap-2 cursor-pointer"
               aria-label="Open Fullscreen Menu"
             >
               <span>{fullMenuOpen ? 'CLOSE' : 'MENU'}</span>
               {fullMenuOpen ? <X className="w-3.5 h-3.5" /> : <Menu className="w-3.5 h-3.5" />}
-            </button>
+            </MagneticButton>
           </div>
         </div>
       </header>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import MagneticButton from './MagneticButton';
 
 export default function CTA({ onStartProject }) {
   return (
@@ -28,15 +29,14 @@ export default function CTA({ onStartProject }) {
           Let’s build something people remember.
         </p>
 
-        <div className="pt-4">
-          <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.98 }}
+        <div className="pt-4 flex justify-center">
+          <MagneticButton
+            strength={0.25}
             onClick={onStartProject}
-            className="px-8 py-4 rounded-full text-xs font-bold tracking-wider uppercase bg-primary hover:bg-blue-600 text-white transition-colors duration-200 inline-flex items-center gap-2"
+            className="px-8 py-4 rounded-full text-xs font-mono font-bold tracking-wider uppercase bg-primary hover:bg-blue-600 text-white transition-all duration-200 inline-flex items-center gap-2 shadow-glow-md hover:shadow-glow-lg cursor-pointer"
           >
             <span>START A PROJECT →</span>
-          </motion.button>
+          </MagneticButton>
         </div>
       </motion.div>
     </section>
