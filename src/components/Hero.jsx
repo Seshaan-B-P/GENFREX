@@ -1,162 +1,167 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowUpRight, ArrowDown } from 'lucide-react';
+import { ArrowRight, ArrowDown, Sparkles } from 'lucide-react';
 
-export default function Hero({ onStartProject, onExploreServices }) {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.1,
-      },
-    },
-  };
+export default function Hero({ onStartProject, onExploreServices, onNavigate }) {
+  const tickerItems = [
+    'Brand',
+    'Content',
+    'Culture',
+    'Growth',
+    'Campaign',
+    'Video',
+    'Storytelling',
+    'Strategy',
+    'AI',
+    'Social',
+    'Web & Code',
+    'Talent Engine',
+  ];
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 24 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.7,
-        ease: [0.16, 1, 0.3, 1],
-      },
-    },
-  };
+  const trackRef = useRef(null);
+  const [duration, setDuration] = useState(35);
+
+  useEffect(() => {
+    const updateSpeed = () => {
+      if (trackRef.current) {
+        const halfWidth = trackRef.current.scrollWidth / 2;
+        const SPEED = 60; // 60 pixels per second constant speed
+        if (halfWidth > 0) {
+          setDuration(halfWidth / SPEED);
+        }
+      }
+    };
+
+    updateSpeed();
+    const timer = setTimeout(updateSpeed, 200);
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(updateSpeed);
+    }
+    window.addEventListener('resize', updateSpeed);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', updateSpeed);
+    };
+  }, []);
 
   return (
     <section
       id="home"
-      className="relative min-h-[90vh] flex flex-col justify-between px-4 sm:px-8 lg:px-12 pt-28 sm:pt-36 pb-12 sm:pb-16 bg-[#08090A] border-b border-white/[0.08] overflow-hidden"
+      className="relative min-h-[95vh] flex flex-col justify-between pt-32 sm:pt-40 pb-0 bg-[#050505] overflow-hidden border-b border-white/[0.08]"
     >
-      {/* Very subtle dark lighting in the corner */}
-      <div className="absolute top-1/4 right-10 w-[450px] h-[350px] bg-primary/[0.05] rounded-full blur-[140px] pointer-events-none" />
+      {/* Subtle Atmospheric Electric Blue Glow with breathing animation */}
+      <motion.div
+        animate={{
+          scale: [1, 1.15, 1],
+          opacity: [0.07, 0.15, 0.07],
+        }}
+        transition={{
+          duration: 7,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+        className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-primary rounded-full blur-[160px] pointer-events-none"
+      />
 
-      <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col justify-center my-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-          {/* Left: Strong Editorial Typography */}
+      {/* Main Center Stage */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 w-full flex-1 flex flex-col justify-center my-auto relative z-10">
+        <div className="max-w-5xl">
+          {/* Tagline Top */}
           <motion.div
-            className="lg:col-span-7 space-y-6 sm:space-y-8"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-xs font-mono text-zinc-300 uppercase tracking-widest mb-6"
           >
-            <motion.div variants={itemVariants} className="inline-block">
-              <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.2em] text-zinc-400 font-mono">
-                MARKETING AGENCY × DIGITAL GROWTH
-              </span>
-            </motion.div>
-
-            <motion.h1
-              variants={itemVariants}
-              className="font-display font-extrabold tracking-[-0.035em] text-white leading-[1.06] break-words"
-              style={{ fontSize: 'clamp(2rem, 6.5vw, 5.25rem)' }}
-            >
-              Empowering Your <br />
-              <span className="text-white">Digital Growth</span> <br />
-              <span className="text-primary">& Talent Connections</span>
-            </motion.h1>
-
-            <motion.p
-              variants={itemVariants}
-              className="text-base sm:text-lg text-zinc-400 font-normal leading-relaxed max-w-xl"
-            >
-              We help businesses build stronger brands, create meaningful digital experiences and connect with the right talent.
-            </motion.p>
-
-            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={onStartProject}
-                className="px-7 py-4 rounded-full text-xs font-bold tracking-wider uppercase bg-primary hover:bg-blue-600 text-white transition-colors duration-200 flex items-center justify-center gap-2 group"
-              >
-                <span>START A PROJECT</span>
-                <ArrowUpRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </motion.button>
-
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={onExploreServices}
-                className="px-7 py-4 rounded-full text-xs font-bold tracking-wider uppercase bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-white/10 hover:border-white/25 transition-colors duration-200 flex items-center justify-center gap-2"
-              >
-                <span>EXPLORE SERVICES</span>
-              </motion.button>
-            </motion.div>
+            <span className="w-1.5 h-1.5 rounded-full bg-accent-cyan animate-pulse" />
+            <span>GENFREX // MODERN GROWTH STUDIO</span>
           </motion.div>
 
-          {/* Right: Strong Professional Creative Composition */}
+          <motion.h1
+            initial={{ opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="font-display font-extrabold tracking-[-0.04em] text-white leading-[1.04] break-words select-none"
+            style={{ fontSize: 'clamp(2.5rem, 8vw, 6.75rem)' }}
+          >
+            Time to build digital presence,{' '}
+            <span className="font-serif italic font-normal text-primary tracking-normal inline-block hover:scale-105 transition-transform">
+              better.
+            </span>
+          </motion.h1>
+
           <motion.div
-            className="lg:col-span-5"
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-4 flex flex-col sm:flex-row sm:items-baseline gap-3 sm:gap-6"
           >
-            <div className="relative rounded-2xl bg-[#0F1012] border border-white/[0.08] p-6 sm:p-8 shadow-xl space-y-6">
-              <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
-                <span className="text-xs font-mono text-zinc-400">STUDIO FOCUS // 2026</span>
-                <span className="text-xs font-mono text-primary font-semibold">SELECTIVE INTAKE</span>
-              </div>
-
-              {/* Composition Content */}
-              <div className="space-y-4">
-                <div className="p-5 rounded-xl bg-zinc-950/80 border border-white/[0.06] space-y-2">
-                  <span className="text-[11px] font-mono text-zinc-500 uppercase">CORE CAPABILITY</span>
-                  <h3 className="font-display font-bold text-lg text-white">
-                    Integrated Brand & Acquisition Systems
-                  </h3>
-                  <p className="text-xs text-zinc-400 leading-relaxed">
-                    Strategy, identity, modern web platforms, and curated talent networks built to scale ambitious companies.
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3 pt-2">
-                  <div className="p-4 rounded-xl bg-zinc-900/40 border border-white/[0.06]">
-                    <span className="text-[10px] font-mono text-zinc-500 block">DISCIPLINE</span>
-                    <span className="text-sm font-semibold text-zinc-200 mt-1 block">Full-Funnel Growth</span>
-                  </div>
-                  <div className="p-4 rounded-xl bg-zinc-900/40 border border-white/[0.06]">
-                    <span className="text-[10px] font-mono text-zinc-500 block">NETWORK</span>
-                    <span className="text-sm font-semibold text-zinc-200 mt-1 block">Vetted Specialist Talent</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between text-xs text-zinc-400 font-mono">
-                <span>GENFREX AGENCY</span>
-                <span className="text-zinc-200">WORLDWIDE ENGAGEMENTS</span>
-              </div>
-            </div>
+            <p className="font-display font-black text-2xl sm:text-4xl text-zinc-300">
+              We’re GENFREX.
+            </p>
+            <p className="text-sm sm:text-base text-zinc-400 font-normal max-w-xl leading-relaxed">
+              We shape brands people believe in — combining strategy, storytelling, high-performance web systems, and curated talent networks.
+            </p>
           </motion.div>
         </div>
       </div>
 
-      {/* Clean Bottom Bar */}
-      <motion.div
-        className="max-w-7xl mx-auto w-full pt-8 border-t border-white/[0.06] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs font-mono text-zinc-500"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
-      >
-        <div className="flex flex-wrap items-center gap-x-4 sm:gap-x-6 gap-y-2">
-          <span className="text-zinc-300">DISCIPLINES:</span>
-          <span>Digital Marketing</span>
-          <span>•</span>
-          <span>Branding</span>
-          <span>•</span>
-          <span>Web Development</span>
-          <span>•</span>
-          <span>Talent</span>
+      {/* Bottom Bar: Tagline & Interactive Checkout Pill */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 w-full pb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-6 relative z-10">
+        <div className="text-xs font-mono text-zinc-500 uppercase tracking-widest space-y-1">
+          <p className="text-zinc-400">KARUR// WORLDWIDE ENGAGEMENTS</p>
+          <p>STRATEGY · CREATIVE · CODE · TALENT</p>
         </div>
 
-        <div className="flex items-center gap-2 text-zinc-400">
-          <span>SCROLL TO EXPLORE</span>
-          <ArrowDown className="w-3.5 h-3.5 text-primary" />
+        {/* Action Buttons: Checkout Self-Made & Discovery Call */}
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Opening Act Checkout Self-Made Pill */}
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => onNavigate ? onNavigate('self-made') : onStartProject()}
+            className="group flex items-center gap-3.5 py-2 px-4 rounded-full bg-[#0E1015] border border-primary/40 hover:border-accent-cyan transition-all shadow-glow-sm cursor-pointer"
+          >
+            <div className="text-left">
+              <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest block leading-tight">
+                CHECKOUT
+              </span>
+              <span className="text-xs sm:text-sm font-bold text-white group-hover:text-accent-cyan transition-colors">
+                Self-Made ★
+              </span>
+            </div>
+            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white shrink-0 group-hover:bg-primary-hover transition-colors">
+              <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+            </div>
+          </motion.button>
+
+          {/* Schedule Discovery Call Pill */}
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={onStartProject}
+            className="group flex items-center gap-3 py-2 px-4 rounded-full bg-white/[0.04] border border-white/10 hover:border-white/25 transition-all text-xs font-mono uppercase tracking-wider text-zinc-300 hover:text-white cursor-pointer"
+          >
+            <span>DISCOVERY CALL</span>
+          </motion.button>
         </div>
-      </motion.div>
+      </div>
+
+      {/* Opening Act Style Infinite Ticker */}
+      <div className="w-full border-t border-white/[0.08] bg-[#07080A] py-3.5 overflow-hidden select-none">
+        <div
+          ref={trackRef}
+          className="flex w-max select-none"
+          style={{ animation: `marquee ${duration}s linear infinite` }}
+        >
+          {[...tickerItems, ...tickerItems, ...tickerItems, ...tickerItems].map((item, idx) => (
+            <div key={idx} className="flex items-center gap-4 text-xs font-mono uppercase tracking-[0.2em] text-zinc-400 px-3">
+              <span>{item}</span>
+              <span className="text-primary font-black">·</span>
+            </div>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }

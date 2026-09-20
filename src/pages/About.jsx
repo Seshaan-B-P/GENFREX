@@ -1,10 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ShieldCheck, Cpu, Target, Award, Users, Sparkles, ArrowUpRight } from 'lucide-react';
+import { ShieldCheck, Cpu, Target, Award, Users, Sparkles, ArrowUpRight, ArrowLeft } from 'lucide-react';
 import About from '../components/About';
 import WhyGenfrex from '../components/WhyGenfrex';
 
-export default function AboutPage({ onStartProject }) {
+export default function AboutPage({ onStartProject, onNavigate }) {
   const leadership = [
     {
       name: 'Elena Rostova',
@@ -31,6 +31,22 @@ export default function AboutPage({ onStartProject }) {
   return (
     <div className="relative pt-28 sm:pt-36 pb-20 px-4 sm:px-8 lg:px-12 bg-[#08090A] min-h-screen">
       <div className="max-w-7xl mx-auto">
+        {/* Breadcrumb / Back to Merged Home */}
+        {onNavigate && (
+          <div className="mb-8 flex items-center justify-between">
+            <button
+              onClick={() => onNavigate('home')}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.04] border border-white/10 hover:border-white/20 text-xs font-mono text-zinc-300 hover:text-white transition-all group"
+            >
+              <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />
+              <span>Back to Overview</span>
+            </button>
+            <span className="text-xs font-mono text-zinc-500 hidden sm:inline-block">
+              Home / About
+            </span>
+          </div>
+        )}
+
         {/* Main About section */}
         <About />
 

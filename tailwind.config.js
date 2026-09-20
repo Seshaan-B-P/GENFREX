@@ -40,6 +40,8 @@ export default {
       fontFamily: {
         sans: ['"Manrope"', '"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
         display: ['"Outfit"', '"Manrope"', '"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+        serif: ['"EB Garamond"', 'Georgia', 'serif'],
+        mono: ['"Azeret Mono"', 'ui-monospace', 'monospace'],
       },
       boxShadow: {
         'glow-sm': '0 0 15px rgba(0, 102, 255, 0.25)',

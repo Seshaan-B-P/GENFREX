@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, useScroll, useSpring } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import CustomCursor from './components/CustomCursor';
@@ -9,6 +9,7 @@ import Home from './pages/Home';
 import ServicesPage from './pages/Services';
 import AboutPage from './pages/About';
 import ContactPage from './pages/Contact';
+import SelfMadePage from './pages/SelfMade';
 
 export default function App() {
   const [activePage, setActivePage] = useState('home');
@@ -25,7 +26,7 @@ export default function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '');
-      if (['home', 'services', 'about', 'contact'].includes(hash)) {
+      if (['home', 'services', 'about', 'contact', 'self-made'].includes(hash)) {
         setActivePage(hash);
       }
     };
@@ -63,24 +64,49 @@ export default function App() {
       {/* Floating Glass Navbar */}
       <Navbar activePage={activePage} setActivePage={navigateTo} />
 
-      {/* Main Content Area */}
+      {/* Main Content Area with Silky Page Transition */}
       <main className="flex-grow">
-        {activePage === 'home' && (
-          <Home
-            onNavigate={navigateTo}
-            onSelectService={handleSelectService}
-            preselectedService={preselectedService}
-          />
-        )}
-        {activePage === 'services' && (
-          <ServicesPage onSelectService={handleSelectService} />
-        )}
-        {activePage === 'about' && (
-          <AboutPage onStartProject={() => navigateTo('contact')} />
-        )}
-        {activePage === 'contact' && (
-          <ContactPage preselectedService={preselectedService} />
-        )}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activePage}
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -14 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {activePage === 'home' && (
+              <Home
+                onNavigate={navigateTo}
+                onSelectService={handleSelectService}
+                preselectedService={preselectedService}
+              />
+            )}
+            {activePage === 'services' && (
+              <ServicesPage
+                onSelectService={handleSelectService}
+                onNavigate={navigateTo}
+              />
+            )}
+            {activePage === 'about' && (
+              <AboutPage
+                onStartProject={() => navigateTo('contact')}
+                onNavigate={navigateTo}
+              />
+            )}
+            {activePage === 'contact' && (
+              <ContactPage
+                preselectedService={preselectedService}
+                onNavigate={navigateTo}
+              />
+            )}
+            {activePage === 'self-made' && (
+              <SelfMadePage
+                onNavigate={navigateTo}
+                onStartProject={() => navigateTo('contact')}
+              />
+            )}
+          </motion.div>
+        </AnimatePresence>
       </main>
 
       {/* Premium Multi-column Footer */}

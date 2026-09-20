@@ -10,7 +10,7 @@ import {
   ArrowUpRight
 } from 'lucide-react';
 
-export default function Services({ onSelectService }) {
+export default function Services({ onSelectService, onExploreAllServices }) {
   const services = [
     {
       num: '01',
@@ -73,9 +73,20 @@ export default function Services({ onSelectService }) {
             </p>
           </div>
 
-          <span className="text-xs font-mono text-zinc-500">
-            06 CORE SERVICES
-          </span>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+            {onExploreAllServices && (
+              <button
+                onClick={onExploreAllServices}
+                className="px-5 py-2.5 rounded-full text-xs font-semibold tracking-wider uppercase text-white bg-zinc-900 hover:bg-zinc-800 border border-white/10 hover:border-white/20 transition-colors flex items-center gap-2 group"
+              >
+                <span>EXPLORE FULL DIRECTORY</span>
+                <ArrowUpRight className="w-4 h-4 text-primary transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </button>
+            )}
+            <span className="text-xs font-mono text-zinc-500">
+              06 CORE SERVICES
+            </span>
+          </div>
         </motion.div>
 
         {/* Structured Service Grid (Staggered Entrance) */}

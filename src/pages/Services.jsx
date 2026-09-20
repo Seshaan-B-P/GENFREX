@@ -8,11 +8,12 @@ import {
   Video, 
   Users2, 
   ArrowUpRight, 
+  ArrowLeft,
   CheckCircle2,
   Sparkles
 } from 'lucide-react';
 
-export default function ServicesPage({ onSelectService }) {
+export default function ServicesPage({ onSelectService, onNavigate }) {
   const serviceDetails = [
     {
       id: 'digital-marketing',
@@ -103,6 +104,22 @@ export default function ServicesPage({ onSelectService }) {
   return (
     <div className="relative pt-28 sm:pt-36 pb-20 px-4 sm:px-8 lg:px-12 bg-background min-h-screen">
       <div className="max-w-7xl mx-auto relative z-10">
+        {/* Breadcrumb / Back to Merged Home */}
+        {onNavigate && (
+          <div className="mb-8 flex items-center justify-between">
+            <button
+              onClick={() => onNavigate('home')}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.04] border border-white/10 hover:border-white/20 text-xs font-mono text-zinc-300 hover:text-white transition-all group"
+            >
+              <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />
+              <span>Back to Overview</span>
+            </button>
+            <span className="text-xs font-mono text-zinc-500 hidden sm:inline-block">
+              Home / Services
+            </span>
+          </div>
+        )}
+
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-xs font-semibold text-zinc-300 tracking-wider font-mono mb-4">

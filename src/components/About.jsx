@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Compass, Lightbulb, Code2, Users } from 'lucide-react';
+import { Compass, Lightbulb, Code2, Users, ArrowUpRight } from 'lucide-react';
 
-export default function About() {
+export default function About({ onExploreAbout }) {
   const pillars = [
     {
       title: 'STRATEGY',
@@ -67,6 +67,17 @@ export default function About() {
             <p className="text-xs font-mono text-zinc-500 pt-2">
               Bespoke engagements tailored to ambitious teams.
             </p>
+            {onExploreAbout && (
+              <div className="pt-2">
+                <button
+                  onClick={onExploreAbout}
+                  className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary hover:text-white transition-colors group"
+                >
+                  <span>Read Full Story & Meet The Collective</span>
+                  <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </button>
+              </div>
+            )}
           </div>
         </motion.div>
 
